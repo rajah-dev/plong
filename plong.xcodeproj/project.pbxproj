@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7CE4C3724B8A37D00D614FA /* main.cpp */; };
+		C7CE4C4324B8A3B500D614FA /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C3F24B8A3B500D614FA /* SDL2_image.framework */; };
+		C7CE4C4424B8A3B500D614FA /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4024B8A3B500D614FA /* SDL2_mixer.framework */; };
+		C7CE4C4524B8A3B500D614FA /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4124B8A3B500D614FA /* SDL2.framework */; };
+		C7CE4C4624B8A3B500D614FA /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4224B8A3B500D614FA /* SDL2_ttf.framework */; };
+		C7F5679724BB9BC100D39E67 /* Moveable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7F5679524BB9BC100D39E67 /* Moveable.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +30,12 @@
 /* Begin PBXFileReference section */
 		C7CE4C3424B8A37D00D614FA /* plong */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = plong; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CE4C3724B8A37D00D614FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		C7CE4C3F24B8A3B500D614FA /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		C7CE4C4024B8A3B500D614FA /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
+		C7CE4C4124B8A3B500D614FA /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		C7CE4C4224B8A3B500D614FA /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
+		C7F5679524BB9BC100D39E67 /* Moveable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Moveable.cpp; path = include/Moveable.cpp; sourceTree = "<group>"; };
+		C7F5679624BB9BC100D39E67 /* Moveable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Moveable.h; path = include/Moveable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +43,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7CE4C4324B8A3B500D614FA /* SDL2_image.framework in Frameworks */,
+				C7CE4C4424B8A3B500D614FA /* SDL2_mixer.framework in Frameworks */,
+				C7CE4C4524B8A3B500D614FA /* SDL2.framework in Frameworks */,
+				C7CE4C4624B8A3B500D614FA /* SDL2_ttf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +58,7 @@
 			children = (
 				C7CE4C3624B8A37D00D614FA /* plong */,
 				C7CE4C3524B8A37D00D614FA /* Products */,
+				C7CE4C3E24B8A3B500D614FA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +74,21 @@
 			isa = PBXGroup;
 			children = (
 				C7CE4C3724B8A37D00D614FA /* main.cpp */,
+				C7F5679524BB9BC100D39E67 /* Moveable.cpp */,
+				C7F5679624BB9BC100D39E67 /* Moveable.h */,
 			);
 			path = plong;
+			sourceTree = "<group>";
+		};
+		C7CE4C3E24B8A3B500D614FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C7CE4C3F24B8A3B500D614FA /* SDL2_image.framework */,
+				C7CE4C4024B8A3B500D614FA /* SDL2_mixer.framework */,
+				C7CE4C4224B8A3B500D614FA /* SDL2_ttf.framework */,
+				C7CE4C4124B8A3B500D614FA /* SDL2.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7F5679724BB9BC100D39E67 /* Moveable.cpp in Sources */,
 				C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +269,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -247,6 +281,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
