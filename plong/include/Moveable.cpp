@@ -45,13 +45,16 @@ void Moveable::setRandomVelocity( void )
 
 //Only for ball movement
 //NEXT STEP: This collision handling sucks, not the right thing at all
+//Maybe check for two types of collisions separately to update defelection, one is wall based, the other is paddle based
 //FUTURE: Should take into consideration angle of deflection
 //FUTURE: Need to update once ball becomes a circle instead of a rectangle
 void Moveable::ballMove( SDL_Rect &player1, SDL_Rect &player2 )
 {
+    //Move the ball based on the current trajectory
     mRect->x += rVelX;
     mRect->y += rVelY;
     
+    //now that it has moved, check to see if it will collide with the window edge or paddle
     if( mRect->y <= 0 || mRect->y + mRect->h >= WINDOW_HEIGHT || checkCollision( *mRect, player1) || checkCollision( *mRect, player2) )
     {
         rVelY = rVelY * -1;
@@ -161,7 +164,7 @@ void Moveable::controlPlayer2( SDL_Event &event )
 
 //Renders Moveable
 //Pass pointer to render by reference
-//Pass color by reference, useful later if I want to update color on a hit
+//Pass color by reference, useful later if I want to update color on a hit. WAIT, does this make sense? Render is called each frame, so color can be passed by value.
 //FUTURE: Update to check for texture, in case I want to render that
 void Moveable::render( SDL_Renderer *&render, SDL_Color &color )
 {

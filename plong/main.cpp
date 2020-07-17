@@ -7,13 +7,19 @@
 //
 
 #include <stdio.h>
+#include <string>
+#include <sstream>
 
 //SDL Specific
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
 #include <SDL2_mixer/SDL_mixer.h>
 #include <SDL2_ttf/SDL_ttf.h>
+
+//Custom Classes
 #include "include/Moveable.h"
+#include "include/Texture.h"
+#include "include/Timer.h"
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
@@ -22,68 +28,86 @@
 bool init( SDL_Window *&window, SDL_Renderer *&render );
 void closeGame( SDL_Window *&window, SDL_Renderer *&render );
 
-
+//Get reference to the pointer to a font
+TTF_Font *loadFont( std::string path, int fsize )
+{
+    return TTF_OpenFont( path.c_str(), fsize );
+}
 
 int main( int argc, const char * argv[] )
 {
     //Pointers to game window and render to then be assoiated with that window
     SDL_Window *gWindow = NULL;
     SDL_Renderer *gRender = NULL;
-        
+    
+    //Media loading
+    TTF_Font *largeFont = NULL;
+    TTF_Font *mediumFont = NULL;
+    TTF_Font *smallFont = NULL;
+    Texture titleTexture;
+    Texture startTexture;
+    Texture controlsTexture;
+    Texture scoreTexture;
+    Texture fpsTexture;
+
+    
     if( !init( gWindow, gRender ) )
     {
         printf( "SDL could not initialize.\n" );
     }
     else
     {
+        //font and texture loading
+        //this is really messy, clean up later, make more descriptive
+        //turn font load into a class at some point
+        largeFont = loadFont( "media/fonts/slkscr.ttf", 60);
+        mediumFont = loadFont( "media/fonts/slkscr.ttf", 40);
+        smallFont = loadFont( "media/fonts/slkscr.ttf", 20);
+        if ( !largeFont || !mediumFont || !smallFont )
+        {
+            printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
+        }
+        //create texture from font, first create surface
+        SDL_Color whiteTextColor = { 255, 255, 255};
+        SDL_Color greyTextColor = { 200, 200, 200};
+        SDL_Color blackTextColor = { 0, 0, 0};
+        titleTexture.loadFromText( gRender, largeFont, "p l o n g", whiteTextColor );
+        startTexture.loadFromText( gRender, mediumFont, "press return to start", whiteTextColor );
+        controlsTexture.loadFromText( gRender, smallFont, "space = pause // r = reset // esc = start menu", greyTextColor );
+        scoreTexture.loadFromText( gRender, largeFont, "0", greyTextColor );
+        
+        
         //Keep track of game states
-        bool start = false; //haven't used yet
+        bool started = false; //haven't used yet
         bool reset = false; //testing
         bool paused = true; //maybe there's a better way to do this
         bool quit = false;
         
-        //NOTE: look up SDL_Event
-        SDL_Event event;
-        
+        //Info for rendering paddles and ball
         int paddleWidth = WINDOW_WIDTH / 40;
         int paddleHeight = WINDOW_HEIGHT / 5;
         int ballDiameter = WINDOW_WIDTH / 40;
         
-        SDL_Color paddleColor;
-        paddleColor.a = 255;
-        paddleColor.b = 0;
-        paddleColor.g = 0;
-        paddleColor.r = 255;
+        SDL_Color paddleColor = { 255, 0, 255, 255 };
+        SDL_Color ballColor = { 0, 0, 0, 255 };
+        
+        SDL_Rect player1 = { paddleWidth * 3, ( WINDOW_HEIGHT / 2 ) - ( paddleHeight / 2 ), paddleWidth, paddleHeight };
+        SDL_Rect player2 = { WINDOW_WIDTH - (paddleWidth * 3) - paddleWidth, ( WINDOW_HEIGHT / 2 ) - ( paddleHeight / 2 ), paddleWidth, paddleHeight };
+        SDL_Rect ball = { ( WINDOW_WIDTH / 2 ) - ( ballDiameter / 2 ), ( WINDOW_HEIGHT / 2 ) - ( ballDiameter / 2 ), ballDiameter, ballDiameter };
 
-        SDL_Color ballColor;
-        ballColor.a = 255;
-        ballColor.b = 0;
-        ballColor.g = 0;
-        ballColor.r = 0;
-        
-        SDL_Rect player1;
-        player1.w = paddleWidth;
-        player1.h = paddleHeight;
-        player1.x = player1.w * 3;
-        player1.y = ( WINDOW_HEIGHT / 2 ) - ( player1.h / 2 );
-             
-        SDL_Rect player2;
-        player2.w = paddleWidth;
-        player2.h = paddleHeight;
-        player2.x = WINDOW_WIDTH - (player2.w * 3) - player2.w;
-        player2.y = ( WINDOW_HEIGHT / 2 ) - ( player2.h / 2 );
-        
-        SDL_Rect ball;
-        ball.w = ballDiameter;
-        ball.h = ball.w;
-        ball.x = ( WINDOW_WIDTH / 2 ) - ( ball.w / 2 );
-        ball.y = ( WINDOW_HEIGHT / 2 ) - ( ball.h / 2 );
-        
         Moveable mPlayer1( player1, 5 );
         Moveable mPlayer2( player2, 5 );
         Moveable mBall( ball, 5);
         mBall.setRandomVelocity();
         
+        //Union that holds event
+        //NOTE: look up SDL_Event further
+        SDL_Event event;
+        
+        int countedFrames = 0;
+        
+        //In memory text stream
+        std::stringstream timeText;
         
         //GAME LOOP STARTS
         while( !quit )
@@ -121,6 +145,11 @@ int main( int argc, const char * argv[] )
                                 reset = true;
                             }
                             break;
+                        case SDLK_RETURN:
+                            if( !started )
+                            {
+                                started = true;
+                            }
                     }
                 }
                 //Control handling
@@ -128,33 +157,81 @@ int main( int argc, const char * argv[] )
                 mPlayer2.controlPlayer2( event );
             }
             
+
+            //Set text to be rendered
+
+            
+            
+            if( !started )
+            {
+                SDL_SetRenderDrawColor( gRender, 180, 0, 255, 255 );
+                SDL_RenderClear( gRender );
+                
+                titleTexture.render( gRender,
+                                        ( WINDOW_WIDTH / 2 ) - ( titleTexture.getWidth() / 2 ), 100 );
+                
+                startTexture.render( gRender,
+                                        ( WINDOW_WIDTH / 2 ) - ( startTexture.getWidth() / 2 ), 200 );
+                
+            }
             
             //GAME LOOP: UPDATE
-            
-            if( !paused )
+            if( started )
             {
-                mBall.ballMove( player1, player2 );
-                mPlayer1.paddleMove();
-                mPlayer2.paddleMove();
+                float avgFPS = countedFrames / ( SDL_GetTicks() / 1000.f );
+                if( avgFPS > 2000000 )
+                {
+                    avgFPS = 0;
+                }
+                
+                timeText.str( "" );
+                timeText << "Average Frames Per Second " << avgFPS;
+                fpsTexture.loadFromText( gRender, smallFont, timeText.str().c_str(), blackTextColor );
+                if( !paused )
+                {
+                    mBall.ballMove( player1, player2 );
+                    mPlayer1.paddleMove();
+                    mPlayer2.paddleMove();
+                }
+                
+                
+                //GAME LOOP: DRAW
+                
+                //Clear screen
+                SDL_SetRenderDrawColor( gRender, 255, 255, 255, 255 );
+                SDL_RenderClear( gRender );
+                fpsTexture.render( gRender, 10, 10 );
+                //Draw paddles & ball
+                mPlayer1.render( gRender, paddleColor );
+                mPlayer2.render( gRender, paddleColor );
+                mBall.render( gRender, ballColor );
+                
             }
             
             
-            //GAME LOOP: DRAW
             
-            //Clear screen
-            SDL_SetRenderDrawColor( gRender, 255, 255, 255, 255 );
-            SDL_RenderClear( gRender );
-            
-            //Draw paddles & ball
-            mPlayer1.render( gRender, paddleColor );
-            mPlayer2.render( gRender, paddleColor );
-            mBall.render( gRender, ballColor );
           
             //Update screen
             SDL_RenderPresent( gRender );
-            
+            ++countedFrames;
         }
     }
+    
+    //closeMedia();
+    //could I create a function to take an array of pointers, identify type, close the object, null the pointer?
+    titleTexture.free();
+    startTexture.free();
+    controlsTexture.free();
+    scoreTexture.free();
+    
+    TTF_CloseFont(smallFont);
+    smallFont = NULL;
+    
+    TTF_CloseFont(mediumFont);
+    mediumFont = NULL;
+    
+    TTF_CloseFont(largeFont);
+    largeFont = NULL;
     
     closeGame( gWindow, gRender );
     return 0;
@@ -216,9 +293,9 @@ bool init( SDL_Window *&window, SDL_Renderer *&render )
                     success = false;
                 }
                 
-                //initialize SDL_ttf
-                //LEARN MORE SDL_ttf
-                if( TTF_Init() != 0 )
+                //initialize SDL_ttf, returns: 0 on success, -1 on any error
+                //LEARN MORE: https://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html
+                if( TTF_Init() == -1 )
                 {
                     printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
                     success = false;
@@ -239,6 +316,8 @@ bool init( SDL_Window *&window, SDL_Renderer *&render )
 
 
 //Destroy and Close!
+//use this to close out all standard things from SDL,
+//will need to create a separate function to close out non-standard bits
 //FUTURE: Check for memory leaks!
 void closeGame( SDL_Window *&window, SDL_Renderer *&render )
 {
@@ -247,7 +326,6 @@ void closeGame( SDL_Window *&window, SDL_Renderer *&render )
 
     SDL_DestroyWindow( window );
     window = NULL;
-    
     
     //Quit SDL & subsystems
     Mix_Quit();

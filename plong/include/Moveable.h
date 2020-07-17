@@ -17,6 +17,8 @@ public:
     //Constructor
     Moveable( SDL_Rect &rectangle, int v = 0 );
     
+    //maybe create a destructor + free() to turn the pointer to SDL_Rect to NULL?
+    
     void setRandomVelocity( void );
     
     void ballMove( SDL_Rect &player1, SDL_Rect &player2 );

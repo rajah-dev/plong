@@ -12,6 +12,8 @@
 		C7CE4C4424B8A3B500D614FA /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4024B8A3B500D614FA /* SDL2_mixer.framework */; };
 		C7CE4C4524B8A3B500D614FA /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4124B8A3B500D614FA /* SDL2.framework */; };
 		C7CE4C4624B8A3B500D614FA /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4224B8A3B500D614FA /* SDL2_ttf.framework */; };
+		C7D579E724C082C700D32B8F /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D579E524C082C700D32B8F /* Texture.cpp */; };
+		C7D579EA24C13C0D00D32B8F /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D579E824C13C0D00D32B8F /* Timer.cpp */; };
 		C7F5679724BB9BC100D39E67 /* Moveable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7F5679524BB9BC100D39E67 /* Moveable.cpp */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +36,10 @@
 		C7CE4C4024B8A3B500D614FA /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		C7CE4C4124B8A3B500D614FA /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		C7CE4C4224B8A3B500D614FA /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
+		C7D579E524C082C700D32B8F /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Texture.cpp; path = include/Texture.cpp; sourceTree = "<group>"; };
+		C7D579E624C082C700D32B8F /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Texture.h; path = include/Texture.h; sourceTree = "<group>"; };
+		C7D579E824C13C0D00D32B8F /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer.cpp; path = include/Timer.cpp; sourceTree = "<group>"; };
+		C7D579E924C13C0D00D32B8F /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = include/Timer.h; sourceTree = "<group>"; };
 		C7F5679524BB9BC100D39E67 /* Moveable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Moveable.cpp; path = include/Moveable.cpp; sourceTree = "<group>"; };
 		C7F5679624BB9BC100D39E67 /* Moveable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Moveable.h; path = include/Moveable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,6 +80,10 @@
 			isa = PBXGroup;
 			children = (
 				C7CE4C3724B8A37D00D614FA /* main.cpp */,
+				C7D579E824C13C0D00D32B8F /* Timer.cpp */,
+				C7D579E924C13C0D00D32B8F /* Timer.h */,
+				C7D579E524C082C700D32B8F /* Texture.cpp */,
+				C7D579E624C082C700D32B8F /* Texture.h */,
 				C7F5679524BB9BC100D39E67 /* Moveable.cpp */,
 				C7F5679624BB9BC100D39E67 /* Moveable.h */,
 			);
@@ -148,8 +158,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7D579E724C082C700D32B8F /* Texture.cpp in Sources */,
 				C7F5679724BB9BC100D39E67 /* Moveable.cpp in Sources */,
 				C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */,
+				C7D579EA24C13C0D00D32B8F /* Timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
