@@ -17,24 +17,17 @@
 #include <SDL2_ttf/SDL_ttf.h>
 
 //Custom Classes
-#include "include/Moveable.h"
+#include "include/Ball.h"
 #include "include/Paddle.h"
 #include "include/Court.h"
 #include "include/Texture.h"
+#include "include/Text.h"
 #include "include/Timer.h"
 #include "include/global.h"
 
 
-//LEARN NOTE: in C++ init() = init(void), in C init() = init(any # of paramters)...learn more about this
 bool init( SDL_Window *&window, SDL_Renderer *&render );
 void closeGame( SDL_Window *&window, SDL_Renderer *&render );
-
-//Pointless function for now, but think about a class for font loading (and destruction)
-//could create the 
-TTF_Font *loadFont( std::string path, int fsize )
-{
-    return TTF_OpenFont( path.c_str(), fsize );
-}
 
 int main( int argc, const char * argv[] )
 {
@@ -43,14 +36,10 @@ int main( int argc, const char * argv[] )
     SDL_Renderer *gRender = NULL;
     
     //Media loading
-    TTF_Font *largeFont = NULL;
-    TTF_Font *mediumFont = NULL;
-    TTF_Font *smallFont = NULL;
-    Texture titleTexture;
-    Texture startTexture;
-    Texture controlsTexture;
-    Texture scoreTexture;
-    Texture fpsTexture;
+    Text titleText;
+    Text startText;
+    Text fpsText;
+    fpsText.setColor({255,255,255,100});
 
     
     if( !init( gWindow, gRender ) )
@@ -59,25 +48,19 @@ int main( int argc, const char * argv[] )
     }
     else
     {
-        //font and texture loading
+        //font loading
         //this is really messy, clean up later, make more descriptive
-        //turn font load into a class at some point
-        largeFont = loadFont( "media/fonts/slkscr.ttf", 60);
-        mediumFont = loadFont( "media/fonts/slkscr.ttf", 40);
-        smallFont = loadFont( "media/fonts/slkscr.ttf", 20);
-        if ( !largeFont || !mediumFont || !smallFont )
+        if ( !titleText.setFont( "include/media/fonts/slkscr.ttf", 80 ) ||
+            !startText.setFont( "include/media/fonts/slkscr.ttf", 40 ) ||
+            !fpsText.setFont( "include/media/fonts/slkscr.ttf", 20 ) )
         {
             printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
         }
-        //create texture from font, first create surface
-        SDL_Color whiteTextColor = { 255, 255, 255};
-        SDL_Color greyTextColor = { 200, 200, 200};
-        SDL_Color blackTextColor = { 0, 0, 0};
-        titleTexture.loadFromText( gRender, largeFont, "p l o n g", whiteTextColor );
-        startTexture.loadFromText( gRender, mediumFont, "press return to start", whiteTextColor );
-        controlsTexture.loadFromText( gRender, smallFont, "space = pause // r = reset // esc = start menu", greyTextColor );
-        scoreTexture.loadFromText( gRender, largeFont, "0", greyTextColor );
+        titleText.loadFromText( gRender, "p l o n g" );
+        startText.loadFromText( gRender, "press return to start" );
         
+        //In memory text stream, for fps display
+        std::stringstream timeText;
         
         //Keep track of game states
         bool started = false; //haven't used yet
@@ -86,34 +69,17 @@ int main( int argc, const char * argv[] )
         bool quit = false;
         
         //Info for rendering paddles and ball
-        int paddleWidth = WINDOW_WIDTH / 10;
-        int paddleHeight = WINDOW_HEIGHT / 5;
-        int ballDiameter = WINDOW_WIDTH / 40;
-        
-        SDL_Color paddleColor = { 255, 0, 255, 255 };
-        SDL_Color ballColor = { 0, 0, 0, 255 };
-        
-        SDL_Rect player1 = { paddleWidth * 3, ( WINDOW_HEIGHT / 2 ) - ( paddleHeight / 2 ), paddleWidth, paddleHeight };
-        SDL_Rect player2 = { WINDOW_WIDTH - (paddleWidth * 3) - paddleWidth, ( WINDOW_HEIGHT / 2 ) - ( paddleHeight / 2 ), paddleWidth, paddleHeight };
-        SDL_Rect ball = { ( WINDOW_WIDTH / 2 ) - ( ballDiameter / 2 ), ( WINDOW_HEIGHT / 2 ) - ( ballDiameter / 2 ), ballDiameter, ballDiameter };
-
-        Moveable mPlayer1( player1, 5 );
-        Moveable mPlayer2( player2, 5 );
-        Moveable mBall( ball, 5);
-        mBall.setRandomVelocity();
-        
         Court court;
-        Paddle test1(2);
+        Paddle player1( 1 );
+        Paddle player2( 2 );
+        Ball mBall( 10 );
+        mBall.setRandomVector();
         
         //Union that holds event
-        //NOTE: look up SDL_Event further
         SDL_Event event;
         
         int countedFrames = 0;
-        
-        //In memory text stream
-        std::stringstream timeText;
-        
+
         //GAME LOOP STARTS
         while( !quit )
         {
@@ -158,32 +124,19 @@ int main( int argc, const char * argv[] )
                     }
                 }
                 //Control handling
-                mPlayer1.controlPlayer1( event );
-                mPlayer2.controlPlayer2( event );
-                test1.control( event );
+                player1.control( event );
+                player2.control( event );
             }
-            
-
-            //Set text to be rendered
-            test1.move();
-            
             
             if( !started )
             {
                 SDL_SetRenderDrawColor( gRender, 180, 0, 255, 255 );
                 SDL_RenderClear( gRender );
                                 
-                test1.render(gRender);
                 court.render(gRender);
                 
-                titleTexture.render( gRender,
-                                        ( WINDOW_WIDTH / 2 ) - ( titleTexture.getWidth() / 2 ), 100 );
-                
-                startTexture.render( gRender,
-                                        ( WINDOW_WIDTH / 2 ) - ( startTexture.getWidth() / 2 ), 200 );
-                
-
-                
+                titleText.render( gRender, ( WINDOW_WIDTH / 2 ) - ( titleText.getWidth() / 2 ), 100 );
+                startText.render( gRender, ( WINDOW_WIDTH / 2 ) - ( startText.getWidth() / 2 ), 200 );
             }
             
             //GAME LOOP: UPDATE
@@ -196,54 +149,46 @@ int main( int argc, const char * argv[] )
                 }
                 
                 timeText.str( "" );
-                timeText << "Average Frames Per Second " << avgFPS;
-                fpsTexture.loadFromText( gRender, smallFont, timeText.str().c_str(), blackTextColor );
+                timeText << "FPS " << avgFPS;
+                fpsText.loadFromText( gRender, timeText.str().c_str() );
                 if( !paused )
                 {
-                    mBall.ballMove( player1, player2 );
-                    mPlayer1.paddleMove();
-                    mPlayer2.paddleMove();
+                    player1.move();
+                    player2.move();
+                    mBall.move( player1.getPaddleLocation(), player2.getPaddleLocation() );
                 }
                 
                 
                 //GAME LOOP: DRAW
                 
                 //Clear screen
-                SDL_SetRenderDrawColor( gRender, 255, 255, 255, 255 );
+                SDL_SetRenderDrawColor( gRender, 180, 0, 255, 255 );
                 SDL_RenderClear( gRender );
-                fpsTexture.render( gRender, 10, 10 );
+                fpsText.render( gRender, 10, 10 );
                 //Draw paddles & ball
-                test1.render(gRender);
-                mPlayer1.render( gRender, paddleColor );
-                mPlayer2.render( gRender, paddleColor );
-                mBall.render( gRender, ballColor );
+                court.render(gRender);
+                //Draw paddles & ball
+                player1.render(gRender);
+                player2.render(gRender);
+                mBall.render( gRender );
                 
             }
             
-            
-            
-          
             //Update screen
             SDL_RenderPresent( gRender );
             ++countedFrames;
         }
+
     }
     
     //closeMedia();
     //could I create a function to take an array of pointers, identify type, close the object, null the pointer?
-    titleTexture.free();
-    startTexture.free();
-    controlsTexture.free();
-    scoreTexture.free();
-    
-    TTF_CloseFont(smallFont);
-    smallFont = NULL;
-    
-    TTF_CloseFont(mediumFont);
-    mediumFont = NULL;
-    
-    TTF_CloseFont(largeFont);
-    largeFont = NULL;
+    startText.free();
+    startText.closeFont();
+    fpsText.free();
+    fpsText.closeFont();
+    titleText.free();
+    titleText.closeFont();
     
     closeGame( gWindow, gRender );
     return 0;

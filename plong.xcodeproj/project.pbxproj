@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		C794C71724C393EF00DD694D /* Paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C794C71524C393EF00DD694D /* Paddle.cpp */; };
 		C794C71B24C3C99D00DD694D /* Court.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C794C71924C3C99D00DD694D /* Court.cpp */; };
-		C794C72224C4712100DD694D /* Moveable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C794C72024C4712100DD694D /* Moveable.cpp */; };
 		C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7CE4C3724B8A37D00D614FA /* main.cpp */; };
 		C7CE4C4324B8A3B500D614FA /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C3F24B8A3B500D614FA /* SDL2_image.framework */; };
 		C7CE4C4424B8A3B500D614FA /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4024B8A3B500D614FA /* SDL2_mixer.framework */; };
@@ -17,6 +16,8 @@
 		C7CE4C4624B8A3B500D614FA /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CE4C4224B8A3B500D614FA /* SDL2_ttf.framework */; };
 		C7D579E724C082C700D32B8F /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D579E524C082C700D32B8F /* Texture.cpp */; };
 		C7D579EA24C13C0D00D32B8F /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D579E824C13C0D00D32B8F /* Timer.cpp */; };
+		C7D8331924C5010C0022865D /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D8331724C5010C0022865D /* Ball.cpp */; };
+		C7D8331C24C5063C0022865D /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7D8331A24C5063C0022865D /* Text.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,8 +38,6 @@
 		C794C71824C3988500DD694D /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = global.h; path = include/global.h; sourceTree = "<group>"; };
 		C794C71924C3C99D00DD694D /* Court.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Court.cpp; path = include/Court.cpp; sourceTree = "<group>"; };
 		C794C71A24C3C99D00DD694D /* Court.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Court.h; path = include/Court.h; sourceTree = "<group>"; };
-		C794C72024C4712100DD694D /* Moveable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Moveable.cpp; path = include/Moveable.cpp; sourceTree = "<group>"; };
-		C794C72124C4712100DD694D /* Moveable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Moveable.h; path = include/Moveable.h; sourceTree = "<group>"; };
 		C7CE4C3424B8A37D00D614FA /* plong */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = plong; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7CE4C3724B8A37D00D614FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C7CE4C3F24B8A3B500D614FA /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
@@ -49,6 +48,10 @@
 		C7D579E624C082C700D32B8F /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Texture.h; path = include/Texture.h; sourceTree = "<group>"; };
 		C7D579E824C13C0D00D32B8F /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer.cpp; path = include/Timer.cpp; sourceTree = "<group>"; };
 		C7D579E924C13C0D00D32B8F /* Timer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = include/Timer.h; sourceTree = "<group>"; };
+		C7D8331724C5010C0022865D /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Ball.cpp; path = include/Ball.cpp; sourceTree = "<group>"; };
+		C7D8331824C5010C0022865D /* Ball.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Ball.h; path = include/Ball.h; sourceTree = "<group>"; };
+		C7D8331A24C5063C0022865D /* Text.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Text.cpp; path = include/Text.cpp; sourceTree = "<group>"; };
+		C7D8331B24C5063C0022865D /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Text.h; path = include/Text.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,13 +94,15 @@
 				C7D579E924C13C0D00D32B8F /* Timer.h */,
 				C7D579E524C082C700D32B8F /* Texture.cpp */,
 				C7D579E624C082C700D32B8F /* Texture.h */,
+				C7D8331A24C5063C0022865D /* Text.cpp */,
+				C7D8331B24C5063C0022865D /* Text.h */,
 				C794C71524C393EF00DD694D /* Paddle.cpp */,
 				C794C71624C393EF00DD694D /* Paddle.h */,
 				C794C71924C3C99D00DD694D /* Court.cpp */,
 				C794C71A24C3C99D00DD694D /* Court.h */,
-				C794C72024C4712100DD694D /* Moveable.cpp */,
-				C794C72124C4712100DD694D /* Moveable.h */,
 				C794C71824C3988500DD694D /* global.h */,
+				C7D8331724C5010C0022865D /* Ball.cpp */,
+				C7D8331824C5010C0022865D /* Ball.h */,
 			);
 			path = plong;
 			sourceTree = "<group>";
@@ -172,10 +177,11 @@
 			files = (
 				C7D579E724C082C700D32B8F /* Texture.cpp in Sources */,
 				C794C71B24C3C99D00DD694D /* Court.cpp in Sources */,
-				C794C72224C4712100DD694D /* Moveable.cpp in Sources */,
 				C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */,
 				C7D579EA24C13C0D00D32B8F /* Timer.cpp in Sources */,
+				C7D8331C24C5063C0022865D /* Text.cpp in Sources */,
 				C794C71724C393EF00DD694D /* Paddle.cpp in Sources */,
+				C7D8331924C5010C0022865D /* Ball.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -47,6 +47,11 @@ void Paddle::resetPosition( void )
     paddleRect.y = startPosY;
 }
 
+SDL_Rect Paddle::getPaddleLocation()
+{
+    return paddleRect;
+}
+
 //Handles User Controlled Movement for Moveable
 //Currently only set for VERTICAL movement of paddle
 //NEXT STEP: Really redundant, combine these into one function

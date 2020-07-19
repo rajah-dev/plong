@@ -22,6 +22,8 @@ public:
     
     void move( void );
     
+    SDL_Rect getPaddleLocation();
+    
     void control( SDL_Event &event );
     
     void render( SDL_Renderer *&render );
