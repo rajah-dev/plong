@@ -3,7 +3,7 @@
 //  plong
 //
 //  Created by Vinoo Selvarajah on 7/10/20.
-//  Copyright © 2020 Vinoo Selvarajah. All rights reserved.
+//  Thanks to http://lazyfoo.net tutorials
 //
 
 #include <stdio.h>
@@ -18,17 +18,19 @@
 
 //Custom Classes
 #include "include/Moveable.h"
+#include "include/Paddle.h"
+#include "include/Court.h"
 #include "include/Texture.h"
 #include "include/Timer.h"
+#include "include/global.h"
 
-#define WINDOW_WIDTH (640)
-#define WINDOW_HEIGHT (480)
 
 //LEARN NOTE: in C++ init() = init(void), in C init() = init(any # of paramters)...learn more about this
 bool init( SDL_Window *&window, SDL_Renderer *&render );
 void closeGame( SDL_Window *&window, SDL_Renderer *&render );
 
-//Get reference to the pointer to a font
+//Pointless function for now, but think about a class for font loading (and destruction)
+//could create the 
 TTF_Font *loadFont( std::string path, int fsize )
 {
     return TTF_OpenFont( path.c_str(), fsize );
@@ -84,7 +86,7 @@ int main( int argc, const char * argv[] )
         bool quit = false;
         
         //Info for rendering paddles and ball
-        int paddleWidth = WINDOW_WIDTH / 40;
+        int paddleWidth = WINDOW_WIDTH / 10;
         int paddleHeight = WINDOW_HEIGHT / 5;
         int ballDiameter = WINDOW_WIDTH / 40;
         
@@ -99,6 +101,9 @@ int main( int argc, const char * argv[] )
         Moveable mPlayer2( player2, 5 );
         Moveable mBall( ball, 5);
         mBall.setRandomVelocity();
+        
+        Court court;
+        Paddle test1(2);
         
         //Union that holds event
         //NOTE: look up SDL_Event further
@@ -155,23 +160,29 @@ int main( int argc, const char * argv[] )
                 //Control handling
                 mPlayer1.controlPlayer1( event );
                 mPlayer2.controlPlayer2( event );
+                test1.control( event );
             }
             
 
             //Set text to be rendered
-
+            test1.move();
             
             
             if( !started )
             {
                 SDL_SetRenderDrawColor( gRender, 180, 0, 255, 255 );
                 SDL_RenderClear( gRender );
+                                
+                test1.render(gRender);
+                court.render(gRender);
                 
                 titleTexture.render( gRender,
                                         ( WINDOW_WIDTH / 2 ) - ( titleTexture.getWidth() / 2 ), 100 );
                 
                 startTexture.render( gRender,
                                         ( WINDOW_WIDTH / 2 ) - ( startTexture.getWidth() / 2 ), 200 );
+                
+
                 
             }
             
@@ -202,6 +213,7 @@ int main( int argc, const char * argv[] )
                 SDL_RenderClear( gRender );
                 fpsTexture.render( gRender, 10, 10 );
                 //Draw paddles & ball
+                test1.render(gRender);
                 mPlayer1.render( gRender, paddleColor );
                 mPlayer2.render( gRender, paddleColor );
                 mBall.render( gRender, ballColor );

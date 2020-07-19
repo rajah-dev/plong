@@ -3,13 +3,11 @@
 //  plong
 //
 //  Created by Vinoo Selvarajah on 7/12/20.
-//  Copyright © 2020 Vinoo Selvarajah. All rights reserved.
+//  Thanks to http://lazyfoo.net tutorials
 //
 
 #ifndef Moveable_h
 #define Moveable_h
-
-#include <stdio.h>
 
 class Moveable
 {

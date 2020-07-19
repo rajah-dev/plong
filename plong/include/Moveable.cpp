@@ -3,17 +3,14 @@
 //  plong
 //
 //  Created by Vinoo Selvarajah on 7/12/20.
-//  Copyright © 2020 Vinoo Selvarajah. All rights reserved.
+//  Thanks to http://lazyfoo.net tutorials
 //
 
 #include <SDL2/SDL.h>
 #include <stdlib.h>
+#include "global.h"
 #include "Moveable.h"
 
-
-#define WINDOW_WIDTH (640)
-#define WINDOW_HEIGHT (480)
-#define PI (3.14159265)
 
 //Constructor
 //pass rectangle as reference, and then initialize the SDL_Rect pointer to that reference,
@@ -57,15 +54,18 @@ void Moveable::ballMove( SDL_Rect &player1, SDL_Rect &player2 )
     //now that it has moved, check to see if it will collide with the window edge or paddle
     if( mRect->y <= 0 || mRect->y + mRect->h >= WINDOW_HEIGHT || checkCollision( *mRect, player1) || checkCollision( *mRect, player2) )
     {
+        //undo the previous move since it has collided
         rVelY = rVelY * -1;
+        mRect->y += rVelY;
     }
     if( mRect->x <= 0 || mRect->x + mRect->w >= WINDOW_WIDTH ||  checkCollision( *mRect, player1) || checkCollision( *mRect, player2) )
     {
         rVelX = rVelX * -1;
+        mRect->x += rVelX;
     }
 }
 
-void Moveable::paddleMove()
+void Moveable::paddleMove( )
 {
     //Move the paddle based on handleEvent (rVelY is either positive or negative velocity)
     mRect->y += rVelY;

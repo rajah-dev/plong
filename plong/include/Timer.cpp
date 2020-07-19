@@ -1,37 +1,37 @@
 //
 //  Timer.cpp
-//  plong
 //
 //  Created by Vinoo Selvarajah on 7/16/20.
-//  Copyright © 2020 Vinoo Selvarajah. All rights reserved.
+//  Thanks to http://lazyfoo.net tutorials
 //
-
-#include <SDL2/SDL.h>
+//  Simple class to act as a game timer, for score modifiers or time-based challenges.
+ 
+#include <SDL2/SDL.h> //needed for SDL_GetTicks()
 #include "Timer.h"
 
 Timer::Timer()
 {
+    //initialize all properties
     startTicks = 0;
     pausedTicks = 0;
-    
     started = false;
     paused = false;
 }
 
 void Timer::start()
 {
+    //update status
     started = true;
     paused = false;
     
-    //when first initialized, stores the ticks when SDL was initialized
-    //store the current clock time
+    //when started, store the ticks since SDL was initialized
     startTicks = SDL_GetTicks();
     pausedTicks = 0;
 }
 
-//reset all members
 void Timer::stop()
 {
+    //reset all properties
     started = false;
     paused = false;
     startTicks = 0;
@@ -43,9 +43,8 @@ void Timer::pause()
     if( started && !paused )
     {
         paused = true;
-        //now that we've paused, get the current init time, minus the start time
-        //this is the time at which the clock was paused.
-        //calculate time since paused, get current time and subtract start time, to get time at pause
+
+        //calculate time when paused: get current time and subtract out when timer was started
         pausedTicks = SDL_GetTicks() - startTicks;
         startTicks = 0;
     }
@@ -56,7 +55,8 @@ void Timer::unpause()
     if( started && paused )
     {
         paused = false;
-        //reset starting ticks, get current time and subtract paused time
+        
+        //calculate total start time, using time since paused
         startTicks = SDL_GetTicks() - pausedTicks;
         pausedTicks = 0;
     }
@@ -64,7 +64,7 @@ void Timer::unpause()
 
 Uint32 Timer::getTicks()
 {
-    //store time, will return 0 if timer is stopped or not started
+    //store time and will return 0 if timer is stopped or not started
     Uint32 time = 0;
     
     if( started )

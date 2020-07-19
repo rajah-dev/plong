@@ -3,7 +3,7 @@
 //  plong
 //
 //  Created by Vinoo Selvarajah on 7/16/20.
-//  Copyright © 2020 Vinoo Selvarajah. All rights reserved.
+//  Thanks to http://lazyfoo.net tutorials
 //
 
 #include <string>
@@ -42,8 +42,8 @@ void Texture::free()
 
 bool Texture::loadFromFile( SDL_Renderer *&render, std::string path )
 {
-    //free texture just in case anything else was there, useful if new image needs to be loaded into the texture in the game loop
-    free(); //
+    //free texture just in case anything else was there, maybe useful if new image needs to be loaded into the texture in the game loop
+    free();
     
     SDL_Surface *loadedSurface = NULL;
     loadedSurface = IMG_Load( path.c_str() );
@@ -75,8 +75,8 @@ bool Texture::loadFromFile( SDL_Renderer *&render, std::string path )
 
 bool Texture::loadFromText( SDL_Renderer *&render, TTF_Font *&font, std::string textureText, SDL_Color textColor )
 {
-    //free texture just in case anything else was there, useful if new image needs to be loaded into the texture in the game loop
-    free(); //
+    //free texture just in case anything else was there,
+    free();
     
     SDL_Surface *loadedSurface = NULL;
     loadedSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
@@ -135,7 +135,6 @@ void Texture::render( SDL_Renderer *&render, int x, int y, SDL_Rect *clip, doubl
         renderQuad.h = clip->h;
     }
     
-    //too much stuff here to explain
     SDL_RenderCopyEx( render, loadedTexture, clip, &renderQuad, angle, center, flip);
 }
 

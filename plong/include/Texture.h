@@ -3,7 +3,7 @@
 //  plong
 //
 //  Created by Vinoo Selvarajah on 7/16/20.
-//  Copyright © 2020 Vinoo Selvarajah. All rights reserved.
+//  Thanks to http://lazyfoo.net tutorials
 //
 
 #ifndef Texture_h
@@ -37,11 +37,16 @@ public:
     
     int getWidth();
     int getHeight();
+    
+    //may need a function to get SDL_Texture address if I need to manipulate it outside of the class
+    
+    //how will I want to deal with collision detection?
+    
 private:
     SDL_Texture *loadedTexture;
     
     //stores dimensions from loaded surface
-    //use may change is texture needs to be resized?
+    //use may change if texture needs to be resized?
     int surfaceWidth;
     int surfaceHeight;
     
