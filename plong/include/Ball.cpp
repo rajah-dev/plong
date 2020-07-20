@@ -22,15 +22,17 @@ Ball::Ball( int v )
     ballRect.h = ballRect.w;
     ballRect.x = (WINDOW_WIDTH / 2) - (ballRect.w / 2);
     ballRect.y = (WINDOW_HEIGHT / 2) - (ballRect.h / 2);
-
+    
     ballColor = { 255, 255, 255, 255 };
     //keep track of starting postions, for game starts and resets
-    rStartX = ballRect.x;
-    rStartY = ballRect.y;
+    startPos.x = ballRect.x;
+    startPos.y = ballRect.y;
     
     //for vector math (as needed)
-    rVelX = 0;
-    rVelY = 0;
+    delta.x = 0;
+    delta.y = 0;
+    endVector.x = ballRect.x;
+    endVector.y = ballRect.y;
     velocity = v; //hypotenuse
 }
 
@@ -44,8 +46,8 @@ void Ball::setRandomVector( void )
     int angle = rand() % 360;
     
     //sin/cos(x) - x is an angle expressed in radians (1 radian = 180/PI).
-    rVelX = velocity * cos(angle*PI/180);
-    rVelY = velocity * sin(angle*PI/180);
+    delta.x = velocity * cos(angle*PI/180);
+    delta.y = velocity * sin(angle*PI/180);
 }
 
 //Only for ball movement
@@ -56,27 +58,80 @@ void Ball::setRandomVector( void )
 void Ball::move( SDL_Rect player1, SDL_Rect player2 )
 {
     //Move the ball based on the current trajectory
-    ballRect.x += rVelX;
-    ballRect.y += rVelY;
+    ballRect.x += delta.x;
+    ballRect.y += delta.y;
     
     //now that it has moved, check to see if it will collide with the window edge or paddle
     if( ballRect.y <= 0 || ballRect.y + ballRect.h >= WINDOW_HEIGHT || checkCollision( ballRect, player1) || checkCollision( ballRect, player2) )
     {
         //undo the previous move since it has collided
-        rVelY = rVelY * -1;
-        ballRect.y += rVelY;
+        delta.y = delta.y * -1;
+        ballRect.y += delta.y;
     }
     if( ballRect.x <= 0 || ballRect.x + ballRect.w >= WINDOW_WIDTH ||  checkCollision( ballRect, player1) || checkCollision( ballRect, player2) )
     {
-        rVelX = rVelX * -1;
-        ballRect.x += rVelX;
+        delta.x = delta.x * -1;
+        ballRect.x += delta.x;
     }
+}
+
+SDL_Point Ball::findIntercept( SDL_Point endPoint, SDL_Point delta, int boundary)
+{
+    SDL_Point deltaDiff = {0,0};
+    SDL_Point intercept = {0,0};
+    
+    deltaDiff.y = -(endPoint.y - boundary);
+    deltaDiff.x = (deltaDiff.y * delta.x) / delta.y;
+    
+    intercept.y = endPoint.y + deltaDiff.y;
+    intercept.x = endPoint.x + deltaDiff.x;
+    
+    printf( "(%i, %i)\n", intercept.x, intercept.y );
+    
+    return intercept;
+}
+
+bool Ball::newMove( )
+{
+    bool move = true;
+    SDL_Point deltaDiff = {0,0};
+    SDL_Point intercept = {0,0};
+    
+    endVector.x = ballRect.x + delta.x;
+    endVector.y = ballRect.y + delta.y;
+    
+    if( endVector.y <= 0 ) //Top Wall
+    {
+        endVector = findIntercept( endVector, delta, 0);
+        delta.y = -(delta.y); //invert delta for y axis
+    }
+    
+    if( endVector.y + ballRect.h >= WINDOW_HEIGHT ) //Bottom Wall
+    {
+        deltaDiff.y = -(endVector.y - (WINDOW_HEIGHT - ballRect.h)); //find how far endVector went out of bounds, (ex. 443)
+        deltaDiff.x = (deltaDiff.y * delta.x) / delta.y;
+        intercept.y = endVector.y + deltaDiff.y; //should be total height
+        intercept.x = endVector.x + deltaDiff.x;
+        endVector = intercept;
+        //endVector.y = WINDOW_HEIGHT - ballRect.h;
+        delta.y = -(delta.y); //invert delta for y axis
+    }
+    
+    if( endVector.x <= 0 || endVector.x + ballRect.w >= WINDOW_WIDTH )
+    {
+        move = false;
+    }
+    
+    ballRect.x = endVector.x;
+    ballRect.y = endVector.y;
+    
+    return move;
 }
 
 void Ball::resetPosition()
 {
-    ballRect.x = rStartX;
-    ballRect.y = rStartY;
+    ballRect.x = startPos.x;
+    ballRect.y = startPos.y;
 }
 
 //Simple box to box collision

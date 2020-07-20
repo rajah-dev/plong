@@ -39,7 +39,9 @@ int main( int argc, const char * argv[] )
     Text titleText;
     Text startText;
     Text fpsText;
-    fpsText.setColor({255,255,255,100});
+    Text pausedText;
+    pausedText.setColor({255,255,255,150});
+    fpsText.setColor({255,255,255,150});
 
     
     if( !init( gWindow, gRender ) )
@@ -52,12 +54,14 @@ int main( int argc, const char * argv[] )
         //this is really messy, clean up later, make more descriptive
         if ( !titleText.setFont( "include/media/fonts/slkscr.ttf", 80 ) ||
             !startText.setFont( "include/media/fonts/slkscr.ttf", 40 ) ||
-            !fpsText.setFont( "include/media/fonts/slkscr.ttf", 20 ) )
+            !fpsText.setFont( "include/media/fonts/slkscr.ttf", 20 ) ||
+            !pausedText.setFont( "include/media/fonts/slkscr.ttf", 80 ) )
         {
             printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
         }
         titleText.loadFromText( gRender, "p l o n g" );
         startText.loadFromText( gRender, "press return to start" );
+        pausedText.loadFromText( gRender, "paused" );
         
         //In memory text stream, for fps display
         std::stringstream timeText;
@@ -134,7 +138,6 @@ int main( int argc, const char * argv[] )
                 SDL_RenderClear( gRender );
                                 
                 court.render(gRender);
-                
                 titleText.render( gRender, ( WINDOW_WIDTH / 2 ) - ( titleText.getWidth() / 2 ), 100 );
                 startText.render( gRender, ( WINDOW_WIDTH / 2 ) - ( startText.getWidth() / 2 ), 200 );
             }
@@ -142,6 +145,10 @@ int main( int argc, const char * argv[] )
             //GAME LOOP: UPDATE
             if( started )
             {
+                SDL_SetRenderDrawColor( gRender, 180, 0, 255, 255 );
+                SDL_RenderClear( gRender );
+                
+                
                 float avgFPS = countedFrames / ( SDL_GetTicks() / 1000.f );
                 if( avgFPS > 2000000 )
                 {
@@ -151,19 +158,30 @@ int main( int argc, const char * argv[] )
                 timeText.str( "" );
                 timeText << "FPS " << avgFPS;
                 fpsText.loadFromText( gRender, timeText.str().c_str() );
-                if( !paused )
+                
+                if( paused )
                 {
-                    player1.move();
-                    player2.move();
-                    mBall.move( player1.getPaddleLocation(), player2.getPaddleLocation() );
+                    pausedText.render( gRender, ( WINDOW_WIDTH / 2 ) - ( pausedText.getWidth() / 2 ), 200 );
                 }
                 
+                if( !paused )
+                {
+
+                    player1.move();
+                    player2.move();
+                    if(!mBall.newMove())
+                    {
+                        mBall.resetPosition();
+                        mBall.setRandomVector();
+                        paused = true;
+                    }
+                    //mBall.move( player1.getPaddleLocation(), player2.getPaddleLocation() );
+                }
                 
                 //GAME LOOP: DRAW
                 
                 //Clear screen
-                SDL_SetRenderDrawColor( gRender, 180, 0, 255, 255 );
-                SDL_RenderClear( gRender );
+
                 fpsText.render( gRender, 10, 10 );
                 //Draw paddles & ball
                 court.render(gRender);

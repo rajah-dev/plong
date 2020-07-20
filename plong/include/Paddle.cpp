@@ -15,7 +15,7 @@ Paddle::Paddle( int player )
 {
     //initilaize dimensions of the paddle
     //will want to use court dimensions in future
-    paddleRect.w = WINDOW_WIDTH / 40;
+    paddleRect.w = 10;
     paddleRect.x = 0;
     //change this later, but for now will handle player 1 and 2 location
     if( player == 2 )
@@ -32,6 +32,7 @@ Paddle::Paddle( int player )
     startPosY = paddleRect.y;
     
     //defaults for handling motion
+    
     velocity = 10;
     pVelY = 0;
 }
