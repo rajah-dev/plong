@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C720CBBD24C9A889004A0488 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C720CBBB24C9A889004A0488 /* Game.cpp */; };
 		C794C71724C393EF00DD694D /* Paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C794C71524C393EF00DD694D /* Paddle.cpp */; };
 		C794C71B24C3C99D00DD694D /* Court.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C794C71924C3C99D00DD694D /* Court.cpp */; };
 		C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7CE4C3724B8A37D00D614FA /* main.cpp */; };
@@ -33,6 +34,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C720CBBB24C9A889004A0488 /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = include/Game.cpp; sourceTree = "<group>"; };
+		C720CBBC24C9A889004A0488 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Game.h; path = include/Game.h; sourceTree = "<group>"; };
 		C794C71524C393EF00DD694D /* Paddle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Paddle.cpp; path = include/Paddle.cpp; sourceTree = "<group>"; };
 		C794C71624C393EF00DD694D /* Paddle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Paddle.h; path = include/Paddle.h; sourceTree = "<group>"; };
 		C794C71824C3988500DD694D /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = global.h; path = include/global.h; sourceTree = "<group>"; };
@@ -90,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				C7CE4C3724B8A37D00D614FA /* main.cpp */,
+				C720CBBB24C9A889004A0488 /* Game.cpp */,
+				C720CBBC24C9A889004A0488 /* Game.h */,
 				C7D579E824C13C0D00D32B8F /* Timer.cpp */,
 				C7D579E924C13C0D00D32B8F /* Timer.h */,
 				C7D579E524C082C700D32B8F /* Texture.cpp */,
@@ -178,6 +183,7 @@
 				C7D579E724C082C700D32B8F /* Texture.cpp in Sources */,
 				C794C71B24C3C99D00DD694D /* Court.cpp in Sources */,
 				C7CE4C3824B8A37D00D614FA /* main.cpp in Sources */,
+				C720CBBD24C9A889004A0488 /* Game.cpp in Sources */,
 				C7D579EA24C13C0D00D32B8F /* Timer.cpp in Sources */,
 				C7D8331C24C5063C0022865D /* Text.cpp in Sources */,
 				C794C71724C393EF00DD694D /* Paddle.cpp in Sources */,

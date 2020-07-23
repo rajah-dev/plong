@@ -80,8 +80,24 @@ SDL_Point Ball::findIntercept( SDL_Point endPoint, SDL_Point delta, int boundary
     SDL_Point deltaDiff = {0,0};
     SDL_Point intercept = {0,0};
     
-    deltaDiff.y = -(endPoint.y - boundary);
-    deltaDiff.x = (deltaDiff.y * delta.x) / delta.y;
+    deltaDiff.y = boundary - endPoint.y;
+    deltaDiff.x = (deltaDiff.y * delta.x) / delta.y; //not great, finds it proportionally and this won't actually be an int often
+    
+    intercept.y = endPoint.y + deltaDiff.y;
+    intercept.x = endPoint.x + deltaDiff.x;
+    
+    printf( "(%i, %i)\n", intercept.x, intercept.y );
+    
+    return intercept;
+}
+
+SDL_Point Ball::findInterceptX( SDL_Point endPoint, SDL_Point delta, int boundary)
+{
+    SDL_Point deltaDiff = {0,0};
+    SDL_Point intercept = {0,0};
+    
+    deltaDiff.x = boundary - endPoint.x;
+    deltaDiff.y = (deltaDiff.x * delta.y) / delta.x; //not great, finds it proportionally and this won't actually be an int often
     
     intercept.y = endPoint.y + deltaDiff.y;
     intercept.x = endPoint.x + deltaDiff.x;
@@ -94,12 +110,12 @@ SDL_Point Ball::findIntercept( SDL_Point endPoint, SDL_Point delta, int boundary
 bool Ball::newMove( )
 {
     bool move = true;
-    SDL_Point deltaDiff = {0,0};
-    SDL_Point intercept = {0,0};
     
+    //check to see where the ball will end up
     endVector.x = ballRect.x + delta.x;
     endVector.y = ballRect.y + delta.y;
     
+    //if it hits a wall... change it's trajectory, and recalc endpoint to where it would intercept
     if( endVector.y <= 0 ) //Top Wall
     {
         endVector = findIntercept( endVector, delta, 0);
@@ -108,18 +124,22 @@ bool Ball::newMove( )
     
     if( endVector.y + ballRect.h >= WINDOW_HEIGHT ) //Bottom Wall
     {
-        deltaDiff.y = -(endVector.y - (WINDOW_HEIGHT - ballRect.h)); //find how far endVector went out of bounds, (ex. 443)
-        deltaDiff.x = (deltaDiff.y * delta.x) / delta.y;
-        intercept.y = endVector.y + deltaDiff.y; //should be total height
-        intercept.x = endVector.x + deltaDiff.x;
-        endVector = intercept;
-        //endVector.y = WINDOW_HEIGHT - ballRect.h;
+        endVector = findIntercept( endVector, delta, WINDOW_HEIGHT - ballRect.h);
         delta.y = -(delta.y); //invert delta for y axis
     }
     
-    if( endVector.x <= 0 || endVector.x + ballRect.w >= WINDOW_WIDTH )
+    if( endVector.x + ballRect.w >= WINDOW_WIDTH )
     {
-        move = false;
+        endVector = findInterceptX( endVector, delta, WINDOW_WIDTH - ballRect.w);
+        delta.x = -(delta.x);
+        //move = false;
+    }
+
+    if( endVector.x <= 0 )
+    {
+        endVector = findInterceptX( endVector, delta, 0 );
+        delta.x = -(delta.x);
+        //move = false;
     }
     
     ballRect.x = endVector.x;

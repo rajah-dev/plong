@@ -32,6 +32,7 @@ public:
     void render( SDL_Renderer *&render );
     
     SDL_Point findIntercept( SDL_Point endPoint, SDL_Point delta, int boundary);
+    SDL_Point findInterceptX( SDL_Point endPoint, SDL_Point delta, int boundary);
 
 private:
     SDL_Rect ballRect;
